@@ -1,6 +1,10 @@
 package miproyecto;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -63,8 +67,9 @@ public class Main {
 		//Verifico si existe, de lo contrario pregunto al usuario si quiere crearlo
 		if(!file.exists()) {
 			System.out.println("\n No encontramos un archivo guardado, quieres crearlo? (1. Yes / 2. No");
-			int create = scanner.nextInt();
-			if(create == 1) {
+			System.out.print("Elige una opción: ");
+			int confirm = scanner.nextInt();
+			if(confirm == 1) {
 				try {
 			        if (file.createNewFile()) {
 			            System.out.println("Archivo creado exitosamente.");
@@ -80,27 +85,24 @@ public class Main {
 		boolean managingFiles = true;
 		while(managingFiles) {
 			System.out.println("\n--- Gestor de Archivo ---");
-	        System.out.println("1. Crear archivo (si no existe)");
-	        System.out.println("2. Guardar libros en archivo");
-	        System.out.println("3. Leer libros desde archivo");
-	        System.out.println("4. Eliminar archivo (!!!)");
-	        System.out.println("5. Volver al menú principal");
+	        System.out.println("1. Guardar libros en archivo");
+	        System.out.println("2. Leer libros desde archivo");
+	        System.out.println("3. Eliminar archivo (!!!)");
+	        System.out.println("4. Volver al menú principal");
+	        System.out.print("Elige una opción: ");
 	        int option = scanner.nextInt();
             scanner.nextLine();
             switch (option) {
             case 1:
-                // Llama a la función para crear el archivo
+                saveOnFile();
                 break;
             case 2:
-                // Llama a la función para guardar libros en archivo
+                readFile(file);
                 break;
             case 3:
-                // Llama a la función para leer y mostrar libros del archivo
+                deleteFile(file, scanner);
                 break;
             case 4:
-                // Llama a la función para eliminar el archivo
-                break;
-            case 5:
                 managingFiles = false;
                 break;
             default:
@@ -109,7 +111,59 @@ public class Main {
 		}
 	}
 	
+	private static void saveOnFile() {
+		try {
+			FileWriter writer = new FileWriter("booklist_save.txt");
+
+			for(Book book : library) {
+				writer.write(book.toString() + "\n");
+			}
+			
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void readFile(File file) {
+		if (file.exists()) {
+			try {
+				BufferedReader reader = new BufferedReader (new FileReader("booklist_save.txt"));
+				String line;
+				while((line = reader.readLine()) != null) {
+					System.out.println(line);
+				}
+				reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("El archivo no existe.");
+		}
+	}
+	
+	private static void deleteFile(File file, Scanner scanner) {
+		if(file.exists()) {
+			System.out.print("¿Estás seguro de que deseas eliminar el archivo? (1. Sí / 2. No): ");
+			System.out.print("Elige una opción: ");
+			int confirm = scanner.nextInt();
+			if (confirm == 1) {
+	            if (file.delete()) {
+	                System.out.println("El archivo ha sido eliminado.");
+	            } else {
+	                System.out.println("Error al eliminar el archivo.");
+	            }
+	        } else {
+	            System.out.println("Operación cancelada.");
+	            return;
+	        }
+		}else {
+	        System.out.println("El archivo no existe.");
+	    }
+	}
+	
 	private static void addBook(Scanner scanner) {
+		
 		System.out.println("\n--- Añadir Libro ---");
         System.out.print("Título: ");
         String title = scanner.nextLine();
