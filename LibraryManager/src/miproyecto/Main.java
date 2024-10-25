@@ -1,5 +1,7 @@
 package miproyecto;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,7 +21,13 @@ public class Main {
         	System.out.println("1. Añadir libro");
             System.out.println("2. Listar libros");
             System.out.println("3. Eliminar libro");
-            System.out.println("4. Salir");
+            //A la hora de MODIFICAR un ARCHIVO, tenemos que sobreescribir el archivo ya existente.
+            System.out.println("\n--- Archivo ---");
+            //Validar que exista un archivo, de lo contrario preguntar si se desea crear.
+            System.out.println("4. Gestionar Archivo");
+            System.out.println("\n--- Base de Datos ---");
+            System.out.println("5. BD (más tarde)");
+            System.out.println("6. Salir");
             System.out.print("Elige una opción: ");
             int option = scanner.nextInt();
             scanner.nextLine();
@@ -35,6 +43,9 @@ public class Main {
                 removeBook(scanner);
                 break;
             case 4:
+                submenuArchivo(scanner);
+                break;
+            case 6:
                 running = false;
                 break;
             default:
@@ -44,6 +55,58 @@ public class Main {
             
         }
         
+	}
+	
+	private static void submenuArchivo(Scanner scanner){
+		//Le indico a Java que quiero manipular el siguiente archivo, ya sea para verificar su existencia o sobreescribirlo/borrarlo
+		File file = new File("booklist_save.txt");
+		//Verifico si existe, de lo contrario pregunto al usuario si quiere crearlo
+		if(!file.exists()) {
+			System.out.println("\n No encontramos un archivo guardado, quieres crearlo? (1. Yes / 2. No");
+			int create = scanner.nextInt();
+			if(create == 1) {
+				try {
+			        if (file.createNewFile()) {
+			            System.out.println("Archivo creado exitosamente.");
+			        }
+			    } catch (IOException e) {
+			        System.out.println("Ocurrió un error al crear el archivo.");
+			        e.printStackTrace();
+			    }
+			}else return;
+		}
+		
+		//Continúo con el manejo de archivos
+		boolean managingFiles = true;
+		while(managingFiles) {
+			System.out.println("\n--- Gestor de Archivo ---");
+	        System.out.println("1. Crear archivo (si no existe)");
+	        System.out.println("2. Guardar libros en archivo");
+	        System.out.println("3. Leer libros desde archivo");
+	        System.out.println("4. Eliminar archivo (!!!)");
+	        System.out.println("5. Volver al menú principal");
+	        int option = scanner.nextInt();
+            scanner.nextLine();
+            switch (option) {
+            case 1:
+                // Llama a la función para crear el archivo
+                break;
+            case 2:
+                // Llama a la función para guardar libros en archivo
+                break;
+            case 3:
+                // Llama a la función para leer y mostrar libros del archivo
+                break;
+            case 4:
+                // Llama a la función para eliminar el archivo
+                break;
+            case 5:
+                managingFiles = false;
+                break;
+            default:
+                System.out.println("Opción no válida.");
+            }
+		}
 	}
 	
 	private static void addBook(Scanner scanner) {
