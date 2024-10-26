@@ -1,4 +1,4 @@
-package miproyecto;
+package Model;
 
 public class Book {
 	private String title;

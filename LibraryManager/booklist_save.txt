@@ -1,0 +1,2 @@
+Book{title='miLibro', author='Yo', year=2024, category='2'}
+Book{title='mi segundo libro', author='yo otra vez', year=2025, category='3'}

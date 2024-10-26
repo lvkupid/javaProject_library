@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Model.Book;
+
 public class Main {
 
 	//ARRAY donde se van a guardar los libros
